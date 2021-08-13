@@ -1,4 +1,6 @@
 import copy
+import numpy as np
+
 
 def hasWon(p_board):
 	for i in range(len(p_board)):
@@ -53,21 +55,22 @@ def clearBoard(p_board):
 			selectSpace(p_board, [j, i], '')
 
 def evaluateBoard(p_board):
-	if len(availableSpaces(p_board)) == 0 and hasWon(p_board) is False:
+	if hasWon(p_board) is False:
 		return 0
 	if hasWon(p_board) == 'o':
 		return 1
 	elif hasWon(p_board) == 'x':
 		return -1
 
-def minimax(p_board, isMaximising=True, depth=0, maxdepth=10):
-	depth += 1
-	#print(depth)
-	if len(availableSpaces(p_board)) == 9:
-		return [0, [0, 0]]
-	if gameIsOver(p_board):
+
+
+
+
+def minimax(p_board, isMaximising=True, depth=6, alpha=float('-inf'), beta=float('inf')):
+	if depth<=0 or gameIsOver(p_board):
 		return [evaluateBoard(p_board)]
 	else:
+		bestMove=None
 		if isMaximising:
 			letter = 'o'
 			bestScore = -1000
@@ -78,19 +81,28 @@ def minimax(p_board, isMaximising=True, depth=0, maxdepth=10):
 			f_board = copy.deepcopy(p_board)
 			selectSpace(f_board, availableSpaces(f_board)[i], letter)
 			#print(f_board, "\n")
-			h_bestScore = minimax(f_board, not isMaximising, depth, maxdepth)[0]
+			
 			if isMaximising:
+				h_bestScore = minimax(f_board, not isMaximising, depth-1, alpha, beta)[0]
 				if h_bestScore > bestScore:
 					bestScore = h_bestScore
 					bestMove = availableSpaces(p_board)[i]
+					alpha = max(alpha, bestScore)
+					if alpha>=beta:
+						break
+
 			elif not isMaximising:
+				h_bestScore = minimax(f_board, not isMaximising, depth-1, alpha, beta)[0]
 				if h_bestScore < bestScore:
 					bestScore = h_bestScore
 					bestMove = availableSpaces(p_board)[i]
-			if depth >= maxdepth:
-				break
+					beta=min(beta, bestScore)
+					if beta<=alpha:
+						break
+
 		
 		return [bestScore, bestMove]
+
 
 
 

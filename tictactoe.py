@@ -94,9 +94,9 @@ def main():
 		brainLevel.string = sense
 		if mode == "single" and not turn and not gameIsOver(board) and playing:
 			if sense == "GOD LEVEL":
-				selectSpace(board, minimax(board, not turn)[1], 'o')
+				selectSpace(board, minimax(board, depth=6)[1], 'o')
 			elif sense == "MUMU":
-				selectSpace(board, minimax(board, not turn, maxdepth=4)[1], 'o')
+				selectSpace(board, minimax(board, depth=4)[1], 'o')
 			
 			
 		if playing:
