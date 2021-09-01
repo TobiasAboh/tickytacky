@@ -1,5 +1,6 @@
 import copy
 import numpy as np
+import datetime
 
 
 def hasWon(p_board):
@@ -66,9 +67,17 @@ def evaluateBoard(p_board):
 
 
 
-def minimax(p_board, isMaximising=True, depth=6, alpha=float('-inf'), beta=float('inf')):
-	if depth<=0 or gameIsOver(p_board):
+def minimax(p_board, start, depth, isMaximising=True, alpha=float('-inf'), beta=float('inf')):
+	if (datetime.datetime.now()-start).total_seconds()*1000>100:
+		return [None]
+
+	if depth<=0:
+		return [evaluateBoard(p_board)] 
+
+	if gameIsOver(p_board):
 		return [evaluateBoard(p_board)]
+
+
 	else:
 		bestMove=None
 		if isMaximising:
@@ -83,7 +92,9 @@ def minimax(p_board, isMaximising=True, depth=6, alpha=float('-inf'), beta=float
 			#print(f_board, "\n")
 			
 			if isMaximising:
-				h_bestScore = minimax(f_board, not isMaximising, depth-1, alpha, beta)[0]
+				h_bestScore = minimax(f_board, start, depth-1, not isMaximising, alpha, beta)[0]
+				if h_bestScore==None:
+					return [None]
 				if h_bestScore > bestScore:
 					bestScore = h_bestScore
 					bestMove = availableSpaces(p_board)[i]
@@ -92,7 +103,9 @@ def minimax(p_board, isMaximising=True, depth=6, alpha=float('-inf'), beta=float
 						break
 
 			elif not isMaximising:
-				h_bestScore = minimax(f_board, not isMaximising, depth-1, alpha, beta)[0]
+				h_bestScore = minimax(f_board, start, depth-1, not isMaximising, alpha, beta)[0]
+				if h_bestScore==None:
+					return [None]
 				if h_bestScore < bestScore:
 					bestScore = h_bestScore
 					bestMove = availableSpaces(p_board)[i]
@@ -103,7 +116,17 @@ def minimax(p_board, isMaximising=True, depth=6, alpha=float('-inf'), beta=float
 		
 		return [bestScore, bestMove]
 
-
+def ids(state):
+	start_time=datetime.datetime.now()
+	best_move=[-1, -1]
+	d=1
+	move=minimax(state, start_time, d)
+	while move[0]!=None:
+		d+=1
+		move=minimax(state, start_time, d)
+		if move[0]!=None:
+			bestMove=move[1]
+	return bestMove
 
 
 

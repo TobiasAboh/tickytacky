@@ -1,7 +1,9 @@
 import pygame
+import random
+import copy
 from decimal import *
 from stuff import Grid, Box, load_image, Button, write, scale
-from minmax import availableSpaces, selectSpace, minimax, gameIsOver, hasWon, clearBoard
+from minmax import availableSpaces, selectSpace, minimax, gameIsOver, hasWon, clearBoard, ids
 pygame.init()
 w = 500
 h = 500
@@ -94,9 +96,21 @@ def main():
 		brainLevel.string = sense
 		if mode == "single" and not turn and not gameIsOver(board) and playing:
 			if sense == "GOD LEVEL":
-				selectSpace(board, minimax(board, depth=6)[1], 'o')
+				selectSpace(board, ids(board), 'o')
 			elif sense == "MUMU":
-				selectSpace(board, minimax(board, depth=4)[1], 'o')
+				v=availableSpaces(board)
+				move=random.choice(v)
+				found=False
+				for i in range(len(v)):
+					b=copy.deepcopy(board)
+					fc=copy.deepcopy(board)
+					selectSpace(b, v[i], 'o')
+					selectSpace(fc, v[i], 'x')
+					if hasWon(b)=='o' or hasWon(fc)=='x':
+						found=True
+						move=v[i]
+						break
+				selectSpace(board, move, 'o')
 			
 			
 		if playing:
