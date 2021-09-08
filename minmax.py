@@ -131,8 +131,4 @@ def ids(state):
 	return bestMove
 
 
-board=[['', '', ''],
-	   ['', '', ''],
-	   ['x', '', '']]
 
-print(ids(board))
