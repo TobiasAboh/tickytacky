@@ -79,6 +79,7 @@ def minimax(p_board, start, depth, isMaximising=True, alpha=float('-inf'), beta=
 
 
 	else:
+
 		bestMove=None
 		if isMaximising:
 			letter = 'o'
@@ -126,7 +127,12 @@ def ids(state):
 		move=minimax(state, start_time, d)
 		if move[0]!=None:
 			bestMove=move[1]
+	print(d)
 	return bestMove
 
 
+board=[['', '', ''],
+	   ['', '', ''],
+	   ['x', '', '']]
 
+print(ids(board))

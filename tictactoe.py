@@ -1,6 +1,7 @@
 import pygame
 import random
 import copy
+import numpy as np
 from decimal import *
 from stuff import Grid, Box, load_image, Button, write, scale
 from minmax import availableSpaces, selectSpace, minimax, gameIsOver, hasWon, clearBoard, ids
@@ -96,7 +97,11 @@ def main():
 		brainLevel.string = sense
 		if mode == "single" and not turn and not gameIsOver(board) and playing:
 			if sense == "GOD LEVEL":
-				selectSpace(board, ids(board), 'o')
+				if len(availableSpaces(board))==8:
+					selectSpace(board, [1, 1], 'o')
+				else:
+					selectSpace(board, ids(board), 'o')
+				# print(np.array(board))
 			elif sense == "MUMU":
 				v=availableSpaces(board)
 				move=random.choice(v)
